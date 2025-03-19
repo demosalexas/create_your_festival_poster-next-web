@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useMemo, useCallback, memo, RefObject } from "react"
 import { X, Download, Plus, ArrowUp, ArrowDown, PenLine } from "lucide-react"
-import html2canvas from "html2canvas"
+import html2canvas from "html2canvas-pro"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -431,19 +431,21 @@ export function FestivalPoster() {
       try {
         const canvas = await html2canvas(posterRef.current, {
           backgroundColor: null,
-          scale: 2, // Higher resolution
-        })
-
-        const image = canvas.toDataURL("image/png")
-        const link = document.createElement("a")
-        link.href = image
-        link.download = `${festivalName.replace(/\s+/g, "-").toLowerCase()}-poster.png`
-        link.click()
+          scale: 2,
+          logging: true, // Helps debug
+          useCORS: true, // Avoid cross-origin issues
+        });
+  
+        const image = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = `${festivalName.replace(/\s+/g, "-").toLowerCase()}-poster.png`;
+        link.click();
       } catch (error) {
-        console.error("Error exporting poster:", error)
+        console.error("Error exporting poster:", error);
       }
     }
-  }, [festivalName])
+  }, [festivalName]);
 
   return (
     <div className="w-full max-w-6xl mx-auto">
